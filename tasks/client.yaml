@@ -13,6 +13,12 @@
     - name: Wait NFS server to be up
       wait_for: timeout=300 port=2049 host="{{ item.server_host }}"
       with_items: "{{ nfs_client_imports }}"
+      
+    - name: create local mount points if necessary
+      file:
+        path: "{{ item.local }}"
+        state: directory
+      with_items: "{{ nfs_client_imports }}"
 
     - name: mount the shared directories
       mount:
